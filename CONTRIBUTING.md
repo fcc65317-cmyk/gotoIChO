@@ -1,0 +1,34 @@
+# 协作说明
+
+欢迎提交勘误与改进。仓库只放**在线阅读版看板**，不含题目入库 / 切题 / OCR 工具，也不含打印册 PDF。
+
+## 三类贡献
+
+| 类型 | 改哪里 | 要求 |
+| --- | --- | --- |
+| 勘误纠错 | `site/presentation.json` 中该题的 `body` / `answer` | 在 Issue 或 PR 里写明题 ID、错误内容、正确内容与依据（原卷页码 / 官方答案） |
+| 元数据修正 | `site/questions.json` 的 `tags` / `title` / `topic` / `edition` | 不改 `id`、不改 `provenance`、不动正文 |
+| 新增题目 | 三层同批登记：`questions.json` + `presentation.json` + `numbering.json` | 同时写 `numberById` 与 `countsByTopic`；图片放 `site/assets/`，只以 `assets/...` 相对路径引用 |
+
+改完运行：
+
+```bash
+python tools/validate_public.py
+```
+
+CI 会在每个 PR 上跑同一份校验（纯标准库，Python 3.9+）。
+
+## 硬性规则
+
+1. 三层键集必须一致：`questions.json` = `presentation.json` = `numbering.json.numberById`。
+2. `sum(countsByTopic.values())` 必须等于题目总数；专题内编号不得重号。
+3. 图片一律 WebP，正文引用 `assets/...`，不得出现悬挂引用。
+4. `edition` 只取真实 CChO 届次、`0`（Chemy 联赛）或 `"unknown"`；禁止 `bank`。
+5. 自有题正文小问标签为 `N-x`（N = `numberById` 的值），题名允许为空。
+6. 新增题必须写清来源；**不要上传整份原卷 PDF 或来源不明的材料**。
+7. 不要重新引入 PDF 下载功能或打印册文件（公开版刻意移除，以保持在 1 GB 以内）。
+8. 不提交任何密钥、`.env` 或本机绝对路径。
+
+## 题库来源
+
+题目来自公开渠道的网络资源，版权归原权利人。提交新题前请确认来源适合公开展示；若收到权利人移除请求，维护者会立即处理。
