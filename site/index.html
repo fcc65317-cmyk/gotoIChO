@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <title>Van 化学竞赛题库</title>
-  <meta name="description" content="6090 道化学竞赛题目，按八个专题、届次与来源机构查找，搜索题干关键词，查看参考答案；纯静态、离线可用的在线阅读版。">
+  <meta name="description" content="4157 道化学竞赛题目，按八个专题、届次与来源机构查找，搜索题干关键词，查看参考答案，单题或选题库导出 PDF；纯静态、离线可用的在线阅读版。">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css?v=layout-20261024">
   <link rel="stylesheet" href="interface.css?v=van-1">
@@ -46,17 +46,16 @@
     <section class="introduction" id="introduction" aria-labelledby="introduction-title" tabindex="-1">
       <h1 id="introduction-title">Van 化学竞赛题库</h1>
       <p class="intro-lead">一个按专题、届次与来源整理的化学竞赛题库，供在线阅读、检索与打印练习。</p>
-      <p>本站现收录 <strong>6090 道完整大题</strong>（438 份试卷），来自 Chemy、XeChem、化英社、TBNChem、方圆、壹尖培优、清北营、COBP、HChO 与 FLChem 联考等竞赛机构与系列，以及中国化学奥林匹克初赛、决赛与 IChO 预备题。题目按有机化学、高分子化学、分析化学、结构化学、无机化学、物理化学、生物化学、综合八个专题归类；每题保留原卷字形、结构式、图形、评分与来源标注，参考答案与评分细则随题提供，专题内编号连续稳定。</p>
+      <p>本站现收录 <strong>4157 道完整大题</strong>（410 份试卷），来自 XeChem、化英社、TBNChem、方圆、壹尖培优、清北营、COBP、HChO 与 FLChem 联考等竞赛机构与系列，以及中国化学奥林匹克初赛、决赛与 IChO 预备题。题目按有机化学、高分子化学、分析化学、结构化学、无机化学、物理化学、生物化学、综合八个专题归类；每题保留原卷字形、结构式、图形、评分与来源标注，参考答案与评分细则随题提供，专题编号在网页与 PDF 之间保持一致。本在线阅读版不含 Chemy 系列题目；为便于阅读，专题编号按本版剩余题目重新从 1 连续排定，与内部完整版的题号不同。</p>
       <p>题目与参考答案来自公开渠道的网络资源，版权归各原命题组及相应权利人所有；本站仅供学习交流，不用于任何形式的商业用途。来源、致谢与第三方组件许可见 <a href="NOTICE.md">NOTICE.md</a>；如涉及侵权请联系移除。</p>
       <section class="intro-usage" aria-labelledby="criteria-title">
         <h2 id="criteria-title">分类标准</h2>
-        <p><strong>专题。</strong>按学科知识把题目划入八个专题，一道题只属一个专题；专题内再按届次、试卷排列，并给出全库唯一的专题题号（如“有机化学 第 235 题”），专题内编号连续稳定。</p>
-        <p><strong>届次。</strong>届次指该卷面向的中国化学奥林匹克届次，年份与届号固定对应：第 N 届 = 1986 + N 年（第 39 届为 2025 年，第 40 届为 2026 年）。判定按卷面为准：卷面写明“第 N 届”的取其届号；卷面只写年份的按年份折算（2025 年模拟卷归第 39 届，2017 年第 49 届 IChO 预备题归第 31 届）；联考类试卷标注的“第 N 届”是各机构自有系列届号，不属中国化学奥林匹克届次，一律归入“未知届次”。Chemy《联赛试题合集（1～24）》按来源整体单列为“Chemy 联赛”，不并入届序。目前覆盖第 23 届（2009 年）与第 27～40 届（2013～2026 年），其中第 40 届 782 题、第 39 届 883 题、第 38 届 542 题；另有 Chemy 联赛 240 题、未知届次 1882 题。</p>
+        <p><strong>专题。</strong>按学科知识把题目划入八个专题，一道题只属一个专题；专题内再按届次、试卷排列，并给出全库唯一的专题题号（如“有机化学 第 235 题”），网页与导出的 PDF 使用同一专题编号。</p>
+        <p><strong>届次。</strong>届次指该卷面向的中国化学奥林匹克届次，年份与届号固定对应：第 N 届 = 1986 + N 年（第 39 届为 2025 年，第 40 届为 2026 年）。判定按卷面为准：卷面写明“第 N 届”的取其届号；卷面只写年份的按年份折算（2025 年模拟卷归第 39 届，2017 年第 49 届 IChO 预备题归第 31 届）；联考类试卷标注的“第 N 届”是各机构自有系列届号，不属中国化学奥林匹克届次，一律归入“未知届次”。本版覆盖第 23～40 届（2009～2026 年）共 15 个届次分组，其中第 40 届 782 题、第 39 届 673 题、第 38 届 303 题；另有未知届次 1882 题。</p>
         <p><strong>来源。</strong>按命题机构或系列标注，同一份试卷只属一个来源；界面上的来源标签与筛选即按此口径，混合卷（同届多机构）在目录标题处标注“混合来源”。各来源收录题数如下：</p>
         <div class="table-scroll"><table class="data-table">
           <thead><tr><th>来源机构 / 系列</th><th class="num">题数</th><th>收录内容</th></tr></thead>
           <tbody>
-            <tr><td>Chemy</td><td class="num">1933</td><td>第 32～39 届模拟试题合集、联赛试题合集（1～24）</td></tr>
             <tr><td>IChO 预备题</td><td class="num">405</td><td>2013～2025 年第 45～57 届预备题，按年份折算届次</td></tr>
             <tr><td>XeChem</td><td class="num">347</td><td>第 39、40 届初赛与决赛模拟试题、联考兼初赛模拟</td></tr>
             <tr><td>XeChO</td><td class="num">77</td><td>XeChO 联赛第一届～第八届（机构自有系列届号，归未知届次；答案按题影印原卷）</td></tr>
@@ -75,16 +74,17 @@
             <tr><td>COBP</td><td class="num">52</td><td>第 37 届初赛模拟套卷 37-01～37-06</td></tr>
             <tr><td>FLChem 联考</td><td class="num">49</td><td>第 1～5 届联考（归未知届次）</td></tr>
             <tr><td>中国化学奥林匹克真题</td><td class="num">46</td><td>第 23、38、39、40 届初赛，第 40 届决赛</td></tr>
-            <tr><td><strong>合计</strong></td><td class="num"><strong>6090</strong></td><td>八专题、16 个届次分组（含 Chemy 联赛与未知届次）</td></tr>
+            <tr><td><strong>合计</strong></td><td class="num"><strong>4157</strong></td><td>八专题、16 个届次分组（含未知届次）；已剔除 Chemy 来源 1933 题</td></tr>
           </tbody>
         </table></div>
       </section>
       <section class="intro-usage" aria-labelledby="usage-title">
         <h2 id="usage-title">题库与使用</h2>
-        <p><strong>按目录找题。</strong>选择专题后，在“题目目录”中按届次、试卷展开，点击题目名称即可阅读。顶部三个筛选器分别限定来源、届次与试卷；卷面未标注届次的联考卷收在“未知届次”一栏，Chemy 联赛合集单列，两者都可正常筛选、选题与下载。知道专题题号时，在“输入专题题号”中输入数字，点击“跳转”。网页与 PDF 使用相同的专题编号，筛选后编号不变。</p>
+        <p><strong>按目录找题。</strong>选择专题后，在“题目目录”中按届次、试卷展开，点击题目名称即可阅读。顶部三个筛选器分别限定来源、届次与试卷；卷面未标注届次的联考卷收在“未知届次”一栏，可正常筛选、选题与下载。知道专题题号时，在“输入专题题号”中输入数字，点击“跳转”。网页与 PDF 使用相同的专题编号，筛选后编号不变。</p>
         <p><strong>按关键词找题。</strong>点击顶部搜索框，输入知识点、题目名称或题干中的词语，如“电极电势”“EDTA”。多个关键词用空格分隔，可查找同时包含这些词的题目；也可以限定专题、届次和试卷，或勾选“同时搜索答案”。点击搜索结果阅读原题，看完后点击“返回搜索结果”继续查找。图片中的文字与结构式可能搜不到。</p>
         <p><strong>阅读题目与答案。</strong>每道题下方都有“查看参考答案”，点击即可展开答案与评分细则。题目标题下方标有原卷出处（机构、卷名与原卷题号），方便回查。</p>
-        <p><strong>在线阅读版。</strong>本站提供题干与参考答案的在线阅读、检索与筛选，不提供 PDF 下载。需要离线保存时，可用浏览器的「打印 / 另存为 PDF」，或在 AI 组卷结果里使用「打印题目 / 打印答案」。</p>
+        <p><strong>下载单题或自选练习卷。</strong>点击每道题下方的「下载本题 PDF」可保存一道题；也可以把多道题「选入练习卷」，或用顶部「按题目 / 试卷选题」按题号、名称、整卷、整届勾选。选题库一次最多 <strong>10 道</strong>，勾选会一直保留，关掉页面也不会丢。选好后点「下载选题 PDF」，再选「下载题目 PDF」或「下载答案 PDF」；页面会排好版并自动打开打印窗口，在打印窗口里选择「另存为 PDF」即可保存成一个 PDF 文件。</p>
+        <p><strong>PDF 里的编号。</strong>导出的 PDF 中每道题的标题都是「某某专题 · 第 N 题」，这个 N 是<strong>专题编号</strong>（网页上显示的题号），不是原卷题号；原卷题号与出处另用小字标注，方便回查。题目与答案可分别导出，均按专题与专题编号顺序排列。</p>
       </section>
       <a class="intro-browse" href="#organic">浏览专题题目</a>
       <footer class="copyright">题目与参考答案版权归原命题组及相应权利人所有；本站仅作学习交流整理，如涉及侵权请联系移除。</footer>
@@ -93,7 +93,7 @@
       <div class="topic-head"><div><h1 id="topic-title">化学竞赛题库</h1><p id="topic-summary" role="status">正在加载题库，请稍候…</p></div><div class="downloads" id="downloads"></div></div>
       <div class="selection-tools" id="selection-tools"><button id="select-visible" aria-haspopup="dialog" aria-controls="question-picker">按题目 / 试卷选题</button><span id="selection-count" role="status">已选 0 题</span><button id="download-selected" disabled>下载选题 PDF</button><button id="clear-selection" disabled>清空</button></div>
       <div id="questions" aria-busy="true"><p class="loading-note">正在读取题目与编号…</p></div>
-      <footer class="copyright">题目与参考答案来源：Chemy、XeChem、XeChO、致竞堂、北斗、TBNChem、方圆、壹尖培优、清北营、COBP、HChO 联考 / 综合卷、FLChem 联考、IChO 预备题与中国化学奥林匹克初赛、决赛试题，详见各题来源标注。版权归原命题组及相应权利人所有；本站仅作学习交流整理，如涉及侵权请联系移除。</footer>
+      <footer class="copyright">题目与参考答案来源：XeChem、XeChO、致竞堂、北斗、TBNChem、方圆、壹尖培优、清北营、COBP、HChO 联考 / 综合卷、FLChem 联考、IChO 预备题与中国化学奥林匹克初赛、决赛试题，详见各题来源标注。版权归原命题组及相应权利人所有；本站仅作学习交流整理，如涉及侵权请联系移除。</footer>
     </div>
   </main>
   <dialog class="search-dialog" id="search-dialog" aria-labelledby="search-title">
@@ -114,9 +114,9 @@
   </dialog>
   <dialog class="export-dialog" id="export-dialog" aria-labelledby="export-title">
     <div class="search-heading"><h2 id="export-title">下载选题 PDF</h2><button id="export-close" class="dialog-close" aria-label="关闭选题下载">×</button></div>
-    <p class="export-help">题目和参考答案可分别下载，均按同一选题清单排列，保留原有编号与出处。连续排版，页满时自然换页。</p>
+    <p class="export-help">题目和参考答案可分别导出，均按同一选题清单排列；PDF 里的题号使用网页上的专题编号，并附原卷题号与出处。</p>
     <ul id="export-list" class="export-list" aria-label="将要下载的题目"></ul>
-    <p class="export-help">首次下载需读取相关专题题册，可能需要稍候。关闭窗口可取消生成。</p>
+    <p class="export-help">点下面任一按钮会排好版并打开打印窗口，在窗口里选择「另存为 PDF」即可保存。一次最多 10 道题。</p>
     <p id="export-status" role="status" aria-live="polite"></p>
     <div class="export-actions"><button id="export-start">下载题目 PDF</button><button id="export-answers">下载答案 PDF</button><button id="export-cancel">取消</button></div>
   </dialog>

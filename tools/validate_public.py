@@ -4,8 +4,9 @@
     python tools/validate_public.py
     python tools/validate_public.py --root <仓库根>
 
-检查：三层键集 / counts / 专题编号 / 图片引用与格式 / 发布目录体积 /
-PDF 资产已移除 / 下载入口已隐藏 / 首页数字 / edition / 明文密钥。
+检查：三层键集 / counts / 专题编号连续 / Chemy 题已剔除 / 图片引用与格式 /
+发布目录体积 / 打印册资产已移除 / 单题与选题库入口可见 / 首页数字 /
+edition / 明文密钥。
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ import json
 import os
 import re
 import sys
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -72,6 +73,21 @@ def main() -> int:
     else:
         print("[OK] 专题内编号无重号")
 
+    per_topic = defaultdict(list)
+    for q in qs:
+        per_topic[str(q.get("topic", ""))].append(nmap.get(q["id"]))
+    broken = [t for t, nums in per_topic.items() if sorted(nums) != list(range(1, len(nums) + 1))]
+    if broken:
+        failures.append(f"专题编号未从 1 连续排定：{broken[:3]}")
+    else:
+        print("[OK] 各专题编号均从 1 连续排定")
+
+    chemy = [q["id"] for q in qs if str(q["id"]).startswith("chemy")]
+    if chemy:
+        failures.append(f"仍残留 {len(chemy):,} 道 Chemy 题，例 {chemy[:3]}")
+    else:
+        print("[OK] 公开版不含 Chemy 来源题")
+
     refs: set[str] = set()
     def walk(v):
         if isinstance(v, dict):
@@ -120,9 +136,21 @@ def main() -> int:
 
     css = (site / "styles.css").read_text(encoding="utf-8")
     if "#downloads" in css and "display: none" in css:
-        print("[OK] PDF 下载入口已隐藏")
+        print("[OK] 专题册直链与 AI 组卷旧 PDF 按钮已隐藏")
     else:
-        failures.append("styles.css 缺少隐藏下载入口的样式")
+        failures.append("styles.css 缺少隐藏旧 PDF 入口的样式")
+    hide_block = css.split("/* 公开在线阅读版", 1)[-1] if "/* 公开在线阅读版" in css else ""
+    if ".question-download" in hide_block or ".selection-tools" in hide_block:
+        failures.append("单题下载 / 选题库入口被误隐藏")
+    else:
+        print("[OK] 单题下载与选题库入口保持可见")
+
+    app = (site / "app.js").read_text(encoding="utf-8")
+    if all(s in app for s in ("MAX_SELECTION = 10", "ai-printing", "专题 · 第 ${numbers[q.id]} 题", "localStorage")):
+        print("[OK] 选题库 1-10 题 · 打印导出 · 专题编号 · 勾选持久化")
+    else:
+        failures.append("app.js 缺少选题库 / 打印导出 / 专题编号实现")
+
     html = (site / "index.html").read_text(encoding="utf-8")
     m = re.search(r"<strong>(\d+) 道完整大题</strong>", html)
     if not m or int(m.group(1)) != len(qs):

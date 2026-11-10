@@ -277,7 +277,7 @@
       const q=byId.get(item.id);
       return `<article class="ai-item"><h2>练习第 ${i+1} 题 · ${safe(q.topic)}专题第 ${numbers[q.id]} 题</h2><p class="ai-origin">${safe(origin(q))}</p>${kind==='answers'?association(item):''}<div class="${kind==='answers'?'answer-content':'q-body'}">${presentation[q.id][kind==='answers'?'answer':'body']}</div></article>`;
     }).join('');
-    target.insertAdjacentHTML('beforeend','<footer class="ai-print-copyright">题目与参考答案版权归原命题组所有，仅供学术交流使用。</footer>');
+    target.insertAdjacentHTML('beforeend','<footer class="ai-print-copyright">题目与参考答案版权归原命题组及相应权利人所有；本站仅作学习交流整理。</footer>');
     window.renderVanMath&&window.renderVanMath(target);
     target.querySelectorAll('img').forEach(img=>{img.loading='eager';});
     try{

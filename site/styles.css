@@ -25,10 +25,6 @@
 /* 来源标签（题目目录 届次/试卷 前缀，2026-10-27） */
 .source-tag{display:inline-block;margin-right:7px;padding:1px 7px;border-radius:3px;font-size:11px;background:#eef4f0;color:#2f6f4f;border:1px solid #d8e4dc;vertical-align:1px;white-space:nowrap}
 
-/* 公开在线阅读版：不提供 PDF 下载（打印功能仍可用） */
+/* 公开在线阅读版：只隐藏依赖打印册的旧入口（单题 / 选题库下载照常开放） */
 #downloads,
-.question-download,
-.selection-tools,
-#question-picker,
-#export-dialog,
 [data-ai-export] { display: none !important; }

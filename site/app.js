@@ -55,18 +55,39 @@ let searchSignature = '';
 let showingIntroduction = true;
 const summaryById = new Map();
 const selectedQuestions = new Set();
-let exportItems = [], exportWorker = null, exportBusy = false;
+const MAX_SELECTION = 10;
+const SELECTION_KEY = 'van-selection-v1';
+let exportItems = [], exportBusy = false, selectionFlashTimer = 0;
 let pickerList = [], pickerGroups = new Map(), pickerTimer;
 
+function saveSelection() {
+  try { localStorage.setItem(SELECTION_KEY,JSON.stringify([...selectedQuestions])); } catch (_) {}
+}
+function flashSelection(message) {
+  const el = $('selection-count');
+  el.textContent = message; el.style.color = '#a32d2d';
+  clearTimeout(selectionFlashTimer);
+  selectionFlashTimer = setTimeout(() => updateSelection(),2400);
+}
 function updateSelection() {
+  saveSelection();
   $('selection-tools').classList.toggle('has-selection',selectedQuestions.size > 0);
-  $('selection-count').textContent = `已选 ${selectedQuestions.size} 题`;
+  $('selection-count').textContent = `已选 ${selectedQuestions.size} / ${MAX_SELECTION} 题`;
+  $('selection-count').style.color = '';
   $('download-selected').disabled = $('clear-selection').disabled = !selectedQuestions.size;
   $('select-visible').disabled = !ready;
   document.documentElement.style.setProperty('--selection-height',selectedQuestions.size ? `${$('selection-tools').offsetHeight}px` : '0px');
   if ($('question-picker').open) syncPickerSelection();
 }
 function selectItems(list,checked) {
+  if (checked) {
+    const extra = list.filter(q => q && !selectedQuestions.has(q.id)).length;
+    if (selectedQuestions.size + extra > MAX_SELECTION) {
+      flashSelection(`最多选 ${MAX_SELECTION} 道题，请先减少已选`);
+      syncPickerSelection();
+      return;
+    }
+  }
   for (const q of list) { if (checked) selectedQuestions.add(q.id); else selectedQuestions.delete(q.id); }
   document.querySelectorAll('#questions [data-select-question]').forEach(input => { input.checked = selectedQuestions.has(input.dataset.selectQuestion); });
   updateSelection();
@@ -86,7 +107,7 @@ function syncPickerSelection() {
     const count = selectionState(input,list);
     input.parentElement.querySelector('.picker-group-count').textContent = `${count} / ${list.length} 题`;
   });
-  $('picker-selection-count').textContent = `已选 ${selectedQuestions.size} 题`;
+  $('picker-selection-count').textContent = `已选 ${selectedQuestions.size} / ${MAX_SELECTION} 题`;
   $('picker-download').disabled = $('picker-clear').disabled = !selectedQuestions.size;
 }
 function pickerMatches(q,query) {
@@ -137,6 +158,8 @@ function openPicker() {
   $('question-picker').showModal(); renderPicker(); $('picker-tree').scrollTop = 0;
 }
 function openExport(ids) {
+  if (!ids.length) { flashSelection('请先勾选 1-10 道题'); return; }
+  if (ids.length > MAX_SELECTION) { flashSelection(`一次最多导出 ${MAX_SELECTION} 道题，请分批`); return; }
   exportItems = ids.map(id => byId.get(id)).filter(Boolean).sort((a,b) => topics.indexOf(a.topic)-topics.indexOf(b.topic) || numbers[a.id]-numbers[b.id]);
   if (!exportItems.length) return;
   closePanel(false);
@@ -148,33 +171,46 @@ function openExport(ids) {
   $('export-dialog').showModal();
 }
 function cancelExport() {
-  exportWorker?.terminate(); exportWorker = null; exportBusy = false;
+  exportBusy = false;
   $('export-start').disabled = false;
   $('export-answers').disabled = false;
 }
 function startExport(kind='questions') {
   if (exportBusy) return;
-  const answers=kind==='answers',button=answers?'export-answers':'export-start';
-  const snapshot=exportItems.slice(),label=answers?'答案':'题目';
-  exportBusy = true; $('export-start').disabled = true; $('export-answers').disabled = true;
-  $('export-status').textContent = `正在准备${label}…`;
-  try { exportWorker = new Worker('pdf-worker.js?v=selected-answers-v1'); }
-  catch (_) { exportFailed('PDF 工具暂时无法启动，请刷新页面后重试。',button,label); return; }
-  exportWorker.onerror = () => exportFailed('PDF 工具加载失败，请检查网络后重试。',button,label);
-  exportWorker.onmessage = ({data}) => {
-    if (data.status) $('export-status').textContent = data.status;
-    else if (data.error) exportFailed(data.error,button,label);
-    else if (data.bytes) {
-      const blob = new Blob([data.bytes],{type:'application/pdf'});
-      const url = URL.createObjectURL(blob), link = document.createElement('a');
-      const single = snapshot.length === 1 ? `${snapshot[0].topic}-第${numbers[snapshot[0].id]}题` : `选题-${snapshot.length}题`;
-      link.href = url; link.download = `Van-${single}-${label}.pdf`; document.body.append(link); link.click(); link.remove();
-      setTimeout(() => URL.revokeObjectURL(url),60000);
-      $('export-status').textContent = 'PDF 已生成，下载已开始。';
-      cancelExport(); $(button).textContent = `再次下载${label} PDF`;
-    }
+  const answers = kind === 'answers', label = answers ? '答案' : '题目';
+  const snapshot = exportItems.slice();
+  if (!snapshot.length || snapshot.length > MAX_SELECTION) {
+    $('export-status').textContent = `请选择 1-${MAX_SELECTION} 道题`;
+    return;
+  }
+  exportBusy = true;
+  $('export-start').disabled = true; $('export-answers').disabled = true;
+  $('export-status').textContent = `正在排版${label}，随后会打开打印窗口…`;
+  const target = $('ai-print'), field = answers ? 'answer' : 'body';
+  target.innerHTML = `<h1>Van 化学竞赛题库 · ${label}练习</h1>`
+    + `<p>共 ${snapshot.length} 道完整大题；题号使用网页上的专题编号，括号与出处行标注原卷题号便于回查。</p>`
+    + snapshot.map(q => `<article class="ai-item"><h2>${escapeHtml(q.topic)}专题 · 第 ${numbers[q.id]} 题</h2>`
+      + `<p class="ai-origin">来源：${escapeHtml(sourceLine(q))} · 原卷第 ${q.number} 题</p>`
+      + `<div class="${answers ? 'answer-content' : 'q-body'}">${presentation[q.id][field] || ''}</div></article>`).join('')
+    + '<footer class="ai-print-copyright">题目与参考答案版权归原命题组及相应权利人所有；本站仅作学习交流整理。</footer>';
+  window.renderVanMath && window.renderVanMath(target);
+  target.querySelectorAll('img').forEach(img => { img.loading = 'eager'; });
+  const finish = () => {
+    document.body.classList.remove('ai-printing');
+    target.replaceChildren(); target.hidden = true;
+    cancelExport();
+    $('export-status').textContent = '已在打印窗口生成排版；选择「另存为 PDF」即可保存。需要题目和答案两份时，请再点另一个按钮。';
   };
-  exportWorker.postMessage({kind:answers?'answers':'questions',items:snapshot.map(q => ({id:q.id,slug:bookOf(q)})),version:pdfVersion,title:`Van · ${label} · ${snapshot.map(q => `${q.topic}第${numbers[q.id]}题`).join('、')}`});
+  Promise.all([...target.querySelectorAll('img')].map(img => img.decode().catch(() => {})))
+    .then(() => document.fonts.ready)
+    .then(() => {
+      target.hidden = false;
+      document.body.classList.add('ai-printing');
+      $('export-dialog').close();
+      window.print();
+    })
+    .catch(() => { $('export-status').textContent = '有题图未能加载，请重试。'; })
+    .finally(finish);
 }
 function exportFailed(message,button='export-start',label='题目') {
   cancelExport(); $('export-status').textContent = message; $(button).textContent = `重试下载${label} PDF`;
@@ -205,6 +241,9 @@ $('download-selected').addEventListener('click',() => openExport([...selectedQue
 $('questions').addEventListener('change',event => {
   const input = event.target.closest('[data-select-question]');
   if (!input) return;
+  if (input.checked && selectedQuestions.size >= MAX_SELECTION) {
+    input.checked = false; flashSelection(`最多选 ${MAX_SELECTION} 道题`); return;
+  }
   if (input.checked) selectedQuestions.add(input.dataset.selectQuestion); else selectedQuestions.delete(input.dataset.selectQuestion);
   updateSelection();
 });
@@ -647,6 +686,7 @@ async function loadLibrary() {
       }
     }
     byId = new Map(questions.map(q => [q.id,q])); byTopic = new Map(topics.map(t => [t,questions.filter(q => q.topic === t)]));
+    try { for (const id of JSON.parse(localStorage.getItem(SELECTION_KEY) || '[]')) if (byId.has(id) && selectedQuestions.size < MAX_SELECTION) selectedQuestions.add(id); } catch (_) {}
     for (const q of questions) paperLabels.set(paperKey(q), q.provenance ? (q.sourcePaperLabel || '未标注试卷') : (editionOf(q) === 0 ? `第${q.paper}届 Chemy 联赛` : `chemy第${editionOf(q)}届 · ${q.sourcePaperLabel || '模拟试题 '+q.paper}`));
     $('library-status').textContent = `${questions.length} 道题 · ${new Set(questions.map(paperKey)).size} 份试卷${incomplete.length ? ` · ${incomplete.length} 题内容待补录` : ''}`;
     $('search-topic').innerHTML = option('all','全部专题','all')+topics.map(t => option(t,t,'all')).join('');
