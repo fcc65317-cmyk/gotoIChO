@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v1.2.0 — 2026-11-10（撤掉私有库中间层，生成链路直连本地工作台）
+
+- **不再需要私有库 `van_chem_question_bank`**：本地工作台 `dist/` 现在**一步直接生成**本站，省掉中间的 2 GB 快照仓库；维护者每次更新由「两条生成命令 + 两次 Push」简化为「**一条命令 + 一次 Push**」。
+- 生成脚本迁入本仓库：`tools/build_public_site.py`（默认源改为 `dist/`）与 `tools/prune_chemy.py`。脚本自带原来中间层做的清洗：剥离 `reviewStatus`、`percent=0 → null`、首页去掉「审核状态」字样、只取被正文引用的题图；末尾仍由 `prune_chemy.apply()` 剔除 Chemy 题并重算首页。
+- 迁移并保留协作能力：勘误 Issue 模板、PR 模板、`ERRATA.md` 勘误台账、`docs/DATA-FORMAT.md` 数据字典、`tools/question-template.json` 加题模板。
+- 维护指南改为「本地工作台 + 公开库」两层口径；README / NOTICE / CONTRIBUTING 同步更新。
+- 生成时**只取保留题目引用的题图**（不先把 1933 道待剔除题的图搬进来再删），原地覆盖重建、几乎零删除，约 3 分钟重建整站。
+- 全量复现验证：`index.html` / `questions.json` / `presentation.json` / `knowledge-index.json` / `styles.css` 与上一版逐字节一致（`app.js` 仅 CRLF/LF 行尾差异，`numbering.json` 仅 JSON 键顺序差异、字段值全同）；`validate_public.py` PASS，冷启动 16 个资源 200、7 个已移除路径 404。
+- 站点内容不变（4157 题 / 410 卷 / 806.9 MB），仅站点内 `NOTICE.md` 的「完整版存放位置」措辞更新。
+
 ## v1.1.0 — 2026-11-10（剔除 Chemy 题 + 单题 PDF / 选题库）
 
 - **剔除 Chemy 系列题目 1933 道**（`id` 以 `chemy` 开头），公开版剩余 **4157 题 / 410 份试卷**；首页题数、卷数、届次分布、来源统计表、来源叙述与页脚同步重算，Chemy 相关措辞全部移除。

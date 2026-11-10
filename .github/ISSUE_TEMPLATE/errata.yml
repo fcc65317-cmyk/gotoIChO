@@ -1,0 +1,58 @@
+name: 题目勘误 / 纠错
+description: 发现题干、答案、图片、来源标注有误时提交
+title: "errata(<题ID>): "
+labels: ["errata"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        本仓库为公开在线阅读版。请勿在此上传原卷 PDF、密钥或任何无授权来源的材料；报勘误请写清题目 ID、专题编号与原卷出处。
+  - type: input
+    id: question_id
+    attributes:
+      label: 题目 ID
+      description: 例如 ORG-1419；可在题目阅读区的来源信息或 URL 参数 ?question= 中找到
+      placeholder: ORG-1419
+    validations:
+      required: true
+  - type: dropdown
+    id: field
+    attributes:
+      label: 错误位置
+      options:
+        - 题干正文（presentation.json / body）
+        - 参考答案（presentation.json / answer）
+        - 图片或图片引用
+        - 题名 / 来源 / 届次等元数据（questions.json）
+        - 专题编号（numbering.json）
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: 当前内容 / 问题描述
+      description: 贴出错误原文或描述现象（如「小问 3-2 题干被题图吞掉」）
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 应改为
+      description: 写出正确内容；不确定可写「待按原卷核对」
+    validations:
+      required: true
+  - type: input
+    id: evidence
+    attributes:
+      label: 依据
+      description: 原卷页码 / 官方答案 / 教材 / 其他可复核来源
+      placeholder: 化英社 38 届卷 14 原卷 p3
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: 补充说明或截图
+    validations:
+      required: false

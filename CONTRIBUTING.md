@@ -1,6 +1,8 @@
 # 协作说明
 
-欢迎提交勘误与改进。仓库只放**在线阅读版看板**，不含题目入库 / 切题 / OCR 工具，也不含打印册 PDF。
+欢迎提交勘误与改进。仓库只放**在线阅读版看板**与生成/校验脚本，不含题目入库 / 切题 / OCR 工具，也不含打印册 PDF。
+
+> `site/` 由 [`tools/build_public_site.py`](tools/build_public_site.py) 从维护者的本地工作台一步生成。直接改 `site/` 的 PR 会在下次刷新时被覆盖；维护者会把改动回写到内部源数据，再重新生成并合并。勘误台账见 [ERRATA.md](ERRATA.md)，字段说明见 [docs/DATA-FORMAT.md](docs/DATA-FORMAT.md)。
 
 ## 三类贡献
 
@@ -28,6 +30,7 @@ CI 会在每个 PR 上跑同一份校验（纯标准库，Python 3.9+）。
 6. 新增题必须写清来源；**不要上传整份原卷 PDF 或来源不明的材料**。
 7. 单题 PDF 与选题库走浏览器打印视图（`window.print()`），不依赖任何外部文件；**不要重新引入 18 册打印册、`export-index/`、`pdf-worker.js` 或 pdf-lib**，它们会让发布目录超过 GitHub Pages 的 1 GB 上限。
 8. 不提交任何密钥、`.env` 或本机绝对路径。
+9. 不要重新引入中间快照层：`site/` 必须能由 `tools/build_public_site.py` 从内部 `dist/` 一步重建；不要把 18 册打印册、原始 JPG 大图或审核台文件放进仓库。
 
 ## 题库来源
 

@@ -1,0 +1,40 @@
+{
+  "_说明": "新增题目时按此模板填写，三层 JSON 必须同批登记；填完删除本 _说明 字段。详见 docs/DATA-FORMAT.md",
+  "questions.json 追加一条": {
+    "id": "ORG-9999",
+    "topic": "有机化学",
+    "title": "",
+    "number": "3",
+    "paper": "示例卷 1",
+    "edition": "unknown",
+    "points": 10,
+    "percent": null,
+    "tags": ["亲电加成", "立体化学"],
+    "sourcePaperLabel": "示例机构 第1届模拟卷",
+    "provenance": {
+      "source_paper_name": "示例机构 第1届模拟卷",
+      "obtained_from": "公开渠道／自行录入（写明来源，不接收无授权原卷）"
+    }
+  },
+  "presentation.json 追加一键": {
+    "ORG-9999": {
+      "body": "<p>题干 HTML；公式用 $...$ 或 $$...$$；图片用 <img src=\"assets/ORG-9999-1-<sha12>.jpg\"></p><p><b>9999-1</b> 小问题干…</p>",
+      "answer": "<p><b>9999-1</b> 参考答案…（官方答案优先用按题头影印的原卷裁片，不要转写公式）</p>"
+    }
+  },
+  "numbering.json 同批写入": {
+    "numberById": { "ORG-9999": 9999 },
+    "countsByTopic": { "有机化学": "<原值 +1>" }
+  },
+  "assets/": [
+    "把题目图片复制进 site/assets/，命名 <题ID>-<序号>-<sha12>.<ext>",
+    "正文只以 assets/... 相对路径引用，不要写绝对路径"
+  ],
+  "提交前": [
+    "确认 title 允许为空，卷面无题名就留空，不写占位标题",
+    "确认小问标签是 N-x（N = numberById 的值，不是原卷题号）",
+    "确认 edition 只取真实届次 / 0 / unknown",
+    "运行 python tools/validate.py，全部 PASS",
+    "在 ERRATA.md 或 CHANGELOG.md 记一行，写明来源"
+  ]
+}

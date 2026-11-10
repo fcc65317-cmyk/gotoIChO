@@ -3,7 +3,7 @@
 一个**纯静态**的化学竞赛题库看板：按八个专题阅读、按届次与来源筛选、题干关键词检索、AI 知识点组卷（本地索引），以及**单题 PDF / 选题库导出**。
 
 - **4157 道完整大题 / 410 份试卷**，八个专题
-- **不含 Chemy 系列题目**：为尊重上游整理项目的授权范围，`id` 以 `chemy` 开头的 1933 道题已整体剔除；完整版保存在维护者的私有仓库中
+- **不含 Chemy 系列题目**：为尊重上游整理项目的授权范围，`id` 以 `chemy` 开头的 1933 道题已整体剔除；完整版仅保存在维护者的本地工作台，不对外提供
 - 无数据库、无后端、无构建步骤、无外部 CDN；公式由仓库内自带的 KaTeX 渲染
 - `site/` 即整站，可直接用 GitHub Pages 或任意静态服务器托管
 - 答案影印统一为 WebP（质量 82），发布目录约 0.8 GB，低于 GitHub Pages 的 1 GB 上限
@@ -51,17 +51,27 @@ python -m http.server 8736
 │  ├─ assets/                题图与答案影印（WebP）
 │  ├─ vendor/katex/          本地 KaTeX 0.16.22（MIT）
 │  └─ NOTICE.md
-├─ tools/validate_public.py  纯标准库一致性校验（CI 使用）
-├─ .github/workflows/        Pages 发布与校验
+├─ tools/
+│  ├─ build_public_site.py   ★ 从内部 dist/ 一步生成本站
+│  ├─ prune_chemy.py         剔除 Chemy 题 / 重新编号（由上一脚本调用）
+│  ├─ validate_public.py     纯标准库一致性校验（CI 使用）
+│  └─ question-template.json 加题模板
+├─ docs/DATA-FORMAT.md       数据字典（改题前必读）
+├─ .github/
+│  ├─ ISSUE_TEMPLATE/errata.yml   勘误入口
+│  ├─ PULL_REQUEST_TEMPLATE.md
+│  └─ workflows/             Pages 发布与校验
+├─ ERRATA.md                 勘误台账
 ├─ LICENSE                   代码 MIT；题目内容不在授权范围内
 └─ NOTICE.md                 来源、版权与第三方组件
 ```
 
 ## 数据与维护
 
-- 本站由内部工作区生成后导出：**剔除 Chemy 题 → 按专题重新连续编号 → 图片转 WebP → 清理孤儿图 → 重算首页统计**。生成脚本不在本仓库，请勿手改 `site/` 里的生成物。
+- 本仓库的 `site/` 由**维护者本地工作台的 `dist/`** 一步生成，入口是 [`tools/build_public_site.py`](tools/build_public_site.py)：剥离内部审核标记 → 剔除 Chemy 题 → 按专题重新连续编号 → 图片转 WebP → 清理孤儿图 → 重算首页统计 → 排除打印册与审核台资产。**请勿手改 `site/` 里的生成物**，下次刷新会被整体覆盖。
 - 改动后请运行 `python tools/validate_public.py`（检查三层数据一致、编号连续、图片零缺失、无 Chemy 题、体积 < 1 GB、无密钥）。
-- 勘误、加题、文件格式说明见 [CONTRIBUTING.md](CONTRIBUTING.md)。本仓库内容由内部工作区生成后导出，**请勿直接编辑 `site/` 里的生成物**（下次刷新会被覆盖）。
+- 勘误见 [ERRATA.md](ERRATA.md)，加题与字段说明见 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [docs/DATA-FORMAT.md](docs/DATA-FORMAT.md)。
+- 维护者每次更新只需**一条生成命令 + 一次 Push**；GitHub Actions 会自动重新发布网站。
 
 ## 已知限制
 
