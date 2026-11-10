@@ -61,7 +61,7 @@ python -m http.server 8736
 
 - 本站由内部工作区生成后导出：**剔除 Chemy 题 → 按专题重新连续编号 → 图片转 WebP → 清理孤儿图 → 重算首页统计**。生成脚本不在本仓库，请勿手改 `site/` 里的生成物。
 - 改动后请运行 `python tools/validate_public.py`（检查三层数据一致、编号连续、图片零缺失、无 Chemy 题、体积 < 1 GB、无密钥）。
-- 勘误、加题、文件格式说明见 [CONTRIBUTING.md](CONTRIBUTING.md)；本地大项目与本仓库的关系、每次如何同步，见维护者工作区的 `docs/本地与GitHub维护指南.md`。
+- 勘误、加题、文件格式说明见 [CONTRIBUTING.md](CONTRIBUTING.md)。本仓库内容由内部工作区生成后导出，**请勿直接编辑 `site/` 里的生成物**（下次刷新会被覆盖）。
 
 ## 已知限制
 

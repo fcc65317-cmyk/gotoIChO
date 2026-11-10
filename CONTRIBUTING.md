@@ -23,10 +23,10 @@ CI 会在每个 PR 上跑同一份校验（纯标准库，Python 3.9+）。
 1. 三层键集必须一致：`questions.json` = `presentation.json` = `numbering.json.numberById`。
 2. `sum(countsByTopic.values())` 必须等于题目总数；专题内编号不得重号。
 3. 图片一律 WebP，正文引用 `assets/...`，不得出现悬挂引用。
-4. `edition` 只取真实 CChO 届次、`0`（Chemy 联赛）或 `"unknown"`；禁止 `bank`。
-5. 自有题正文小问标签为 `N-x`（N = `numberById` 的值），题名允许为空。
+4. `edition` 只取真实 CChO 届次、`0`（联赛类合集）或 `"unknown"`；禁止 `bank`。
+5. 专题内编号必须从 1 连续（本版剔除 Chemy 题后重新排定）；正文里的小问标签与「原第 N 题」沿用**原卷编号**，与专题编号不同，属预期口径，不要批量替换。
 6. 新增题必须写清来源；**不要上传整份原卷 PDF 或来源不明的材料**。
-7. 不要重新引入 PDF 下载功能或打印册文件（公开版刻意移除，以保持在 1 GB 以内）。
+7. 单题 PDF 与选题库走浏览器打印视图（`window.print()`），不依赖任何外部文件；**不要重新引入 18 册打印册、`export-index/`、`pdf-worker.js` 或 pdf-lib**，它们会让发布目录超过 GitHub Pages 的 1 GB 上限。
 8. 不提交任何密钥、`.env` 或本机绝对路径。
 
 ## 题库来源
